@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des bibliothèques</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Épreuve finale - Services Web H26</h1>
+    <p id="nom-eleve">Tommy Fontaine</p>
+
+    <div class="conteneur">
+
+        <!-- Créer une bibliothèque -->
+        <div class="carte">
+            <h2>Créer une bibliothèque</h2>
+
+            <div class="groupe">
+                <label for="creer-nom">Nom de la bibliothèque</label>
+                <input type="text" id="creer-nom" placeholder="Ex: Bibliothèque Centrale">
+            </div>
+
+            <div class="groupe">
+                <label for="creer-courriel">Adresse courriel</label>
+                <input type="email" id="creer-courriel" placeholder="ex@biblio.ca">
+            </div>
+
+            <div class="groupe">
+                <label for="creer-mdp">Mot de passe</label>
+                <input type="password" id="creer-mdp" placeholder="••••••••">
+            </div>
+
+            <button id="btn-creer">Créer</button>
+
+            <div class="message" id="creer-message"></div>
+            <div class="cle-api" id="creer-cle"></div>
+        </div>
+
+        <!-- Récupérer / Régénérer la clé API -->
+        <div class="carte">
+            <h2>Récupérer sa clé API</h2>
+
+            <div class="groupe">
+                <label for="cle-courriel">Adresse courriel</label>
+                <input type="email" id="cle-courriel" placeholder="ex@biblio.ca">
+            </div>
+
+            <div class="groupe">
+                <label for="cle-mdp">Mot de passe</label>
+                <input type="password" id="cle-mdp" placeholder="••••••••">
+            </div>
+
+            <div class="groupe-checkbox">
+                <input type="checkbox" id="cle-nouvelle">
+                <label for="cle-nouvelle">Générer une nouvelle clé</label>
+            </div>
+
+            <button id="btn-cle">Récupérer</button>
+
+            <div class="message" id="cle-message"></div>
+            <div class="cle-api" id="cle-resultat"></div>
+        </div>
+
+    </div>
+
+    <script src="script.js" defer></script>
+
+</body>
+</html>

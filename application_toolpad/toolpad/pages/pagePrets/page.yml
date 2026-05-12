@@ -1,0 +1,341 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mui/toolpad/v0.11.0/docs/schemas/v1/definitions.json#properties/Page
+
+apiVersion: v1
+kind: page
+spec:
+  title: pagePret
+  display: shell
+  authorization:
+    allowAll: true
+  content:
+    - component: Text
+      name: text
+      props:
+        mode: text
+        value: Gestion des prêts
+    - component: Text
+      name: text1
+      props:
+        value: Id du livre
+    - component: PageRow
+      name: pageRow
+      props:
+        justifyContent: start
+      children:
+        - component: PageColumn
+          name: pageColumn
+          layout:
+            columnSize: 1
+          children:
+            - component: TextField
+              name: textFieldId
+              layout:
+                columnSize: 1
+            - component: Button
+              name: button
+              props:
+                content: Chercher
+                onClick:
+                  $$jsExpressionAction: queryGetPret.fetch()
+    - component: PageRow
+      name: pageRow1
+      props:
+        justifyContent: start
+      children:
+        - component: Text
+          name: text2
+          props:
+            value: Emprunteur
+        - component: Text
+          name: text3
+          props:
+            value: Date début
+        - component: Text
+          name: text4
+          props:
+            value: Date retour
+    - component: PageRow
+      name: pageRow2
+      props:
+        justifyContent: start
+      children:
+        - component: TextField
+          name: textFieldEmprunteur
+          props:
+            defaultValue:
+              $$jsExpression: dataGrid.selection?.emprunteur
+        - component: DatePicker
+          name: datePickerDebut
+          props:
+            defaultValue:
+              $$jsExpression: dataGrid.selection?.date_debut
+        - component: DatePicker
+          name: datePickerFin
+          props:
+            defaultValue:
+              $$jsExpression: dataGrid.selection?.date_retour
+    - component: Button
+      name: button1
+      props:
+        content: Ajouter
+        onClick:
+          $$jsExpressionAction: "actionAjouterPret.call()\r
+
+            queryGetPret.refetch()"
+    - component: DataGrid
+      name: dataGrid
+      props:
+        rows:
+          $$jsExpression: queryGetPret.data
+        columns:
+          - field: id
+            type: number
+          - field: emprunteur
+            type: string
+          - field: date_debut
+            type: dateTime
+          - field: date_retour
+            type: dateTime
+          - field: en_cours
+            type: string
+      layout:
+        height: 360
+    - component: PageRow
+      name: pageRow3
+      props:
+        justifyContent: start
+      children:
+        - component: Button
+          name: button2
+          props:
+            content: Modifier
+            onClick:
+              $$jsExpressionAction: "actionModifierPret.call()\r
+
+                queryGetPret.refetch()"
+        - component: Button
+          name: button3
+          props:
+            content: Supprimer
+            onClick:
+              $$jsExpressionAction: "actionSupprimerPret.call()\r
+
+                queryGetPret.refetch()"
+        - component: Button
+          name: button4
+          props:
+            content: Changer Statut
+            onClick:
+              $$jsExpressionAction: "actionChangerStatutPret.call()\r
+
+                queryGetPret.refetch()\r\n"
+  queries:
+    - name: queryGetPret
+      mode: query
+      query:
+        kind: rest
+        url:
+          $$jsExpression: "`${parameters.base_url}/api/livres/${parameters.id}`"
+        headers:
+          - name: authorization
+            value:
+              $$jsExpression: parameters.cle_api
+        method: GET
+        transform: "return data.prets?.map(p => ({\r
+
+          \    ...p,\r
+
+          \    en_cours: new Date(p.date_retour) >= new Date() ? \"Oui\" :
+          \"Non\"\r
+
+          })) ?? [];"
+        transformEnabled: true
+        searchParams: []
+      parameters:
+        - name: base_url
+          value:
+            $$env: API_URL
+        - name: cle_api
+          value:
+            $$env: API_KEY
+        - name: id
+          value:
+            $$jsExpression: textFieldId.value
+    - name: actionModifierPret
+      mode: mutation
+      query:
+        kind: rest
+        url:
+          $$jsExpression: "`${parameters.base_url}/api/prets/${parameters.id}`"
+        headers:
+          - name: authorization
+            value:
+              $$jsExpression: parameters.cle_api
+        method: PUT
+        body:
+          kind: raw
+          content:
+            $$jsExpression: "JSON.stringify({\r
+
+              \    emprunteur: parameters.emprunteur,\r
+
+              \    date_debut: parameters.date_debut,\r
+
+              \    date_retour: parameters.date_retour\r
+
+              })"
+          contentType: application/json
+        searchParams: []
+      parameters:
+        - name: emprunteur
+          value:
+            $$jsExpression: textFieldEmprunteur.value
+        - name: date_debut
+          value:
+            $$jsExpression: datePickerDebut.value
+        - name: date_retour
+          value:
+            $$jsExpression: datePickerFin.value
+        - name: base_url
+          value:
+            $$env: API_URL
+        - name: cle_api
+          value:
+            $$env: API_KEY
+        - name: id
+          value:
+            $$jsExpression: dataGrid.selection?.id
+    - name: actionSupprimerPret
+      mode: mutation
+      query:
+        kind: rest
+        url:
+          $$jsExpression: "`${parameters.base_url}/api/prets/${parameters.id}`"
+        headers:
+          - name: authorization
+            value:
+              $$jsExpression: parameters.cle_api
+        body:
+          kind: raw
+          content:
+            $$jsExpression: "JSON.stringify({\r
+
+              \    emprunteur: parameters.emprunteur,\r
+
+              \    date_debut: parameters.date_debut,\r
+
+              \    date_retour: parameters.date_retour\r
+
+              })"
+          contentType: application/json
+        method: DELETE
+        searchParams: []
+      parameters:
+        - name: base_url
+          value:
+            $$env: API_URL
+        - name: cle_api
+          value:
+            $$env: API_KEY
+        - name: id
+          value:
+            $$jsExpression: dataGrid.selection?.id
+    - name: actionAjouterPret
+      mode: mutation
+      query:
+        kind: rest
+        url:
+          $$jsExpression: "`${parameters.base_url}/api/prets`"
+        searchParams: []
+        headers:
+          - name: authorization
+            value:
+              $$jsExpression: parameters.cle_api
+        body:
+          kind: raw
+          content:
+            $$jsExpression: "JSON.stringify({\r
+
+              \    livre_id: parameters.id,\r
+
+              \    emprunteur: parameters.emprunteur,\r
+
+              \    date_debut: parameters.date_debut,\r
+
+              \    date_retour: parameters.date_retour\r
+
+              })"
+          contentType: application/json
+        method: POST
+      parameters:
+        - name: emprunteur
+          value:
+            $$jsExpression: textFieldEmprunteur.value
+        - name: date_debut
+          value:
+            $$jsExpression: datePickerDebut.value
+        - name: date_retour
+          value:
+            $$jsExpression: datePickerFin.value
+        - name: base_url
+          value:
+            $$env: API_URL
+        - name: cle_api
+          value:
+            $$env: API_KEY
+        - name: id
+          value:
+            $$jsExpression: textFieldId.value
+    - name: actionChangerStatutPret
+      mode: mutation
+      query:
+        kind: rest
+        url:
+          $$jsExpression: "`${parameters.base_url}/api/prets/${parameters.id}/statut`"
+        searchParams: []
+        headers:
+          - name: authorization
+            value:
+              $$jsExpression: parameters.cle_api
+        body:
+          kind: raw
+          content:
+            $$jsExpression: "const d = new Date();\r
+
+              const today =
+              `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${S\
+              tring(d.getDate()).padStart(2,'0')}`;\r
+
+              const futur =
+              `${d.getFullYear()+1}-${String(d.getMonth()+1).padStart(2,'0')}-$\
+              {String(d.getDate()).padStart(2,'0')}`;\r
+
+              JSON.stringify({\r
+
+              \    date_retour: parameters.en_cours == \"Oui\" ? today : futur\r
+
+              })"
+          contentType: application/json
+        method: PATCH
+      parameters:
+        - name: emprunteur
+          value:
+            $$jsExpression: textFieldEmprunteur.value
+        - name: date_debut
+          value:
+            $$jsExpression: datePickerDebut.value
+        - name: date_retour
+          value:
+            $$jsExpression: datePickerFin.value
+        - name: base_url
+          value:
+            $$env: API_URL
+        - name: cle_api
+          value:
+            $$env: API_KEY
+        - name: id
+          value:
+            $$jsExpression: dataGrid.selection?.id
+        - name: en_cours
+          value:
+            $$jsExpression: dataGrid.selection?.en_cours

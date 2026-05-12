@@ -1,0 +1,356 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mui/toolpad/v0.11.0/docs/schemas/v1/definitions.json#properties/Page
+
+apiVersion: v1
+kind: page
+spec:
+  alias:
+    - PLXAL0_
+  title: Default page
+  content:
+    - component: PageRow
+      name: pageRow1
+      props:
+        justifyContent: start
+      children:
+        - component: Text
+          name: text
+          props:
+            value: Gestion des livres
+          layout:
+            columnSize: 1
+        - component: Checkbox
+          name: toggleTous
+          props:
+            mode: checkBox
+            label: Non disponibles
+          layout:
+            columnSize: 1
+    - component: PageRow
+      name: pageRow
+      props:
+        justifyContent: start
+      children:
+        - component: PageColumn
+          name: pageColumn
+          layout:
+            columnSize: 1
+          children:
+            - component: Text
+              name: text1
+              layout:
+                columnSize: 1
+              props:
+                value: Titre
+            - component: TextField
+              name: textFieldTitre
+              props:
+                defaultValue:
+                  $$jsExpression: dataGrid.selection?.titre ?? ""
+        - component: PageColumn
+          name: pageColumn1
+          layout:
+            columnSize: 1
+          children:
+            - component: Text
+              name: text6
+              layout:
+                columnSize: 1
+              props:
+                value: Auteur
+            - component: TextField
+              name: textFieldAuteur
+              props:
+                defaultValue:
+                  $$jsExpression: dataGrid.selection?.auteur ?? ""
+        - component: PageColumn
+          name: pageColumn2
+          layout:
+            columnSize: 1
+          children:
+            - component: Text
+              name: text7
+              layout:
+                columnSize: 1
+              props:
+                value: ISBN
+            - component: TextField
+              name: textFieldISBN
+              props:
+                defaultValue:
+                  $$jsExpression: dataGrid.selection?.isbn ?? ""
+        - component: PageColumn
+          name: pageColumn3
+          layout:
+            columnSize: 1
+          children:
+            - component: Text
+              name: text8
+              layout:
+                columnSize: 1
+              props:
+                value: Description
+            - component: TextField
+              name: textFieldDescription
+              props:
+                defaultValue:
+                  $$jsExpression: dataGrid.selection?.description ?? ""
+    - component: Button
+      name: button
+      props:
+        content: Ajouter
+        onClick:
+          $$jsExpressionAction: "actionAddLivre.call()\r
+
+            queryGetLivres.refetch()"
+    - component: DataGrid
+      name: dataGrid
+      props:
+        rowsSource: prop
+        rows:
+          $$jsExpression: queryGetLivres.data
+        columns:
+          - field: id
+            type: number
+          - field: titre
+            type: string
+          - field: auteur
+            type: string
+          - field: isbn
+            type: number
+          - field: description
+            type: json
+          - field: date_ajout
+            type: dateTime
+          - field: disponible
+            type: number
+        loading: false
+        hideToolbar: false
+        density: compact
+    - component: PageRow
+      name: pageRow3
+      props:
+        justifyContent: start
+      children:
+        - component: Button
+          name: button1
+          props:
+            content: Modifier
+            onClick:
+              $$jsExpressionAction: "actionModificationLivre.call()\r
+
+                queryGetLivres.refetch()"
+        - component: Button
+          name: button2
+          props:
+            content: Supprimer
+            onClick:
+              $$jsExpressionAction: "actionSupprimerLivre.call()\r
+
+                queryGetLivres.refetch()"
+        - component: Button
+          name: button3
+          props:
+            content: Changer Statut
+            onClick:
+              $$jsExpressionAction: "actionChangerStatut.call()\r
+
+                queryGetLivres.refetch()"
+  queries:
+    - name: queryGetLivres
+      mode: query
+      query:
+        kind: rest
+        url:
+          $$jsExpression: "`${parameters.base_url}/api/livres?tous=${parameters.tous}`"
+        headers:
+          - name: authorization
+            value:
+              $$jsExpression: parameters.cle_api
+        method: GET
+        transformEnabled: true
+        transform: "return data.map(livre => ({\r
+
+          \    ...livre,\r
+
+          \    disponible: livre.disponible === 1 ? \"Oui\" : \"Non\",\r
+
+          \    description: livre.description ?? \"Aucune\"\r
+
+          }));"
+        searchParams: []
+      parameters:
+        - name: base_url
+          value:
+            $$env: API_URL
+        - name: cle_api
+          value:
+            $$env: API_KEY
+        - name: tous
+          value:
+            $$jsExpression: 'toggleTous.checked ? "1" : "0"'
+    - name: actionAddLivre
+      mode: mutation
+      query:
+        kind: rest
+        url:
+          $$jsExpression: "`${parameters.base_url}/api/livres`"
+        headers:
+          - name: authorization
+            value:
+              $$jsExpression: parameters.cle_api
+        method: POST
+        body:
+          kind: raw
+          content:
+            $$jsExpression: "JSON.stringify({\r
+
+              \    titre: parameters.titre,\r
+
+              \    auteur: parameters.auteur,\r
+
+              \    isbn: parameters.isbn,\r
+
+              \    description: parameters.description\r
+
+              })"
+          contentType: application/json
+        searchParams: []
+      parameters:
+        - name: base_url
+          value:
+            $$env: API_URL
+        - name: cle_api
+          value:
+            $$env: API_KEY
+        - name: titre
+          value:
+            $$jsExpression: textFieldTitre.value
+        - name: auteur
+          value:
+            $$jsExpression: textFieldAuteur.value
+        - name: isbn
+          value:
+            $$jsExpression: textFieldISBN.value
+        - name: description
+          value:
+            $$jsExpression: textFieldDescription.value
+    - name: actionModificationLivre
+      mode: mutation
+      query:
+        kind: rest
+        url:
+          $$jsExpression: "`${parameters.base_url}/api/livres/${parameters.id}`"
+        headers:
+          - name: authorization
+            value:
+              $$jsExpression: parameters.cle_api
+        body:
+          kind: raw
+          content:
+            $$jsExpression: "JSON.stringify({\r
+
+              \    titre: parameters.titre,\r
+
+              \    auteur: parameters.auteur,\r
+
+              \    isbn: parameters.isbn,\r
+
+              \    description: parameters.description\r
+
+              })"
+          contentType: application/json
+        method: PUT
+        searchParams: []
+      parameters:
+        - name: base_url
+          value:
+            $$env: API_URL
+        - name: cle_api
+          value:
+            $$env: API_KEY
+        - name: titre
+          value:
+            $$jsExpression: textFieldTitre.value
+        - name: auteur
+          value:
+            $$jsExpression: textFieldAuteur.value
+        - name: isbn
+          value:
+            $$jsExpression: textFieldISBN.value
+        - name: description
+          value:
+            $$jsExpression: textFieldDescription.value
+        - name: id
+          value:
+            $$jsExpression: dataGrid.selection.id
+    - name: actionSupprimerLivre
+      mode: mutation
+      query:
+        kind: rest
+        url:
+          $$jsExpression: "`${parameters.base_url}/api/livres/${parameters.id}`"
+        headers:
+          - name: authorization
+            value:
+              $$jsExpression: parameters.cle_api
+        body:
+          kind: raw
+          content:
+            $$jsExpression: "JSON.stringify({\r
+
+              \    titre: parameters.titre,\r
+
+              \    auteur: parameters.auteur,\r
+
+              \    isbn: parameters.isbn,\r
+
+              \    description: parameters.description\r
+
+              })"
+          contentType: application/json
+        method: DELETE
+        searchParams: []
+      parameters:
+        - name: base_url
+          value:
+            $$env: API_URL
+        - name: cle_api
+          value:
+            $$env: API_KEY
+        - name: id
+          value:
+            $$jsExpression: dataGrid.selection.id
+    - name: actionChangerStatut
+      mode: mutation
+      query:
+        kind: rest
+        url:
+          $$jsExpression: "`${parameters.base_url}/api/livres/${parameters.id}/statut`"
+        headers:
+          - name: authorization
+            value:
+              $$jsExpression: parameters.cle_api
+        body:
+          kind: raw
+          content:
+            $$jsExpression: "JSON.stringify({\r
+
+              \    disponible: parameters.disponible\r
+
+              })"
+          contentType: application/json
+        method: PATCH
+        searchParams: []
+      parameters:
+        - name: base_url
+          value:
+            $$env: API_URL
+        - name: cle_api
+          value:
+            $$env: API_KEY
+        - name: id
+          value:
+            $$jsExpression: dataGrid.selection.id
+        - name: disponible
+          value:
+            $$jsExpression: 'dataGrid.selection?.disponible === "Oui" ? 0 : 1'
