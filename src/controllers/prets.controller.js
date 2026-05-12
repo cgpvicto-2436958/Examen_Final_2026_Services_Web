@@ -50,8 +50,9 @@ export const postPret = async (req, res) => {
             return res.status(404).json({ erreur: "Livre introuvable" });
         }
 
-        const debut = date_debut || new Date().toISOString().split('T')[0];
-        await ajouterPret(livre_id, emprunteur, debut, date_retour);
+        const debut = date_debut ? date_debut.split('T')[0] : new Date().toISOString().split('T')[0];
+        const retour = date_retour.split('T')[0];
+        await ajouterPret(livre_id, emprunteur, debut, retour);
 
         res.status(201).json({ message: "Prêt ajouté avec succès" });
 
@@ -116,7 +117,7 @@ export const deletePret = async (req, res) => {
     try {
         const result = await supprimerPret(id);
 
-        if (result.affectedRows === 0) {
+        if (result.rowCount === 0) {
             return res.status(404).json({ erreur: "Prêt introuvable" });
         }
 

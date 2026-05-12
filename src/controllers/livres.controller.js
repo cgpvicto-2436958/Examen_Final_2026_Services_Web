@@ -9,14 +9,13 @@ import {
 
 import { pretsParLivre } from '../models/prets.model.js';
 
-
 // GET /api/livres?tous=1
 export const getLivres = async (req, res) => {
     const { tous } = req.query;
     const { id: bibliotheque_id } = req.bibliotheque;
 
     try {
-        const livres = await listeLivres(bibliotheque_id, tous == 1);
+        const livres = await listeLivres(bibliotheque_id, tous == 1 || tous === 'true');
         res.json(livres);
 
     } catch (erreur) {
@@ -59,7 +58,7 @@ export const getLivre = async (req, res) => {
 // POST /api/livres
 export const postLivre = async (req, res) => {
     const { titre, auteur, isbn } = req.body;
-            const description = req.body.description?.trim() || null;
+    const description = req.body.description?.trim() || null;
     const { id: bibliotheque_id } = req.bibliotheque;
 
     if (!titre || !auteur || !isbn) {
@@ -79,7 +78,8 @@ export const postLivre = async (req, res) => {
 // PUT /api/livres/:id
 export const putLivre = async (req, res) => {
     const { id } = req.params;
-    const { titre, auteur, isbn, description } = req.body;
+    const { titre, auteur, isbn } = req.body;
+    const description = req.body.description?.trim() || null;
     const { id: bibliotheque_id } = req.bibliotheque;
 
     if (!titre || !auteur || !isbn) {
@@ -89,7 +89,7 @@ export const putLivre = async (req, res) => {
     try {
         const result = await modifierLivre(id, bibliotheque_id, titre, auteur, isbn, description);
 
-        if (result.affectedRows === 0) {
+        if (result.rowCount === 0) {
             return res.status(404).json({ erreur: "Livre introuvable" });
         }
 
@@ -114,7 +114,7 @@ export const patchStatutLivre = async (req, res) => {
     try {
         const result = await modifierStatutLivre(id, bibliotheque_id, disponible);
 
-        if (result.affectedRows === 0) {
+        if (result.rowCount === 0) {
             return res.status(404).json({ erreur: "Livre introuvable" });
         }
 
@@ -134,7 +134,7 @@ export const deleteLivre = async (req, res) => {
     try {
         const result = await supprimerLivre(id, bibliotheque_id);
 
-        if (result.affectedRows === 0) {
+        if (result.rowCount === 0) {
             return res.status(404).json({ erreur: "Livre introuvable" });
         }
 
