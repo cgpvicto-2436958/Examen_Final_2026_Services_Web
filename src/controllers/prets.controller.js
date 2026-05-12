@@ -73,7 +73,7 @@ export const putPret = async (req, res) => {
     try {
         const result = await modifierPret(id, emprunteur, date_debut?.split('T')[0], date_retour.split('T')[0]);
 
-        if (result.affectedRows === 0) {
+        if (result.rowCount === 0) {
             return res.status(404).json({ erreur: "Prêt introuvable" });
         }
 
