@@ -97,7 +97,7 @@ export const patchStatutPret = async (req, res) => {
     try {
         const result = await modifierStatutPret(id, date_retour);
 
-        if (result.affectedRows === 0) {
+        if (result.rowCount === 0) {
             return res.status(404).json({ erreur: "Prêt introuvable" });
         }
 
