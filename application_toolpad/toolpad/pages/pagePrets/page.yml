@@ -69,11 +69,15 @@ spec:
           props:
             defaultValue:
               $$jsExpression: dataGrid.selection?.date_debut
+          layout:
+            columnSize: 0.9999780459700212
         - component: DatePicker
           name: datePickerFin
           props:
             defaultValue:
               $$jsExpression: dataGrid.selection?.date_retour
+          layout:
+            columnSize: 1.0000219540299788
     - component: Button
       name: button1
       props:
@@ -192,10 +196,10 @@ spec:
             $$jsExpression: textFieldEmprunteur.value
         - name: date_debut
           value:
-            $$jsExpression: datePickerDebut.value
+            $$jsExpression: datePickerDebut.value.split('T')[0]
         - name: date_retour
           value:
-            $$jsExpression: datePickerFin.value
+            $$jsExpression: datePickerFin.value.split('T')[0]
         - name: base_url
           value:
             $$env: API_URL

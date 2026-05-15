@@ -1,0 +1,488 @@
+{
+  "info": {
+    "_postman_id": "3a59d84f-2a2f-4a5d-be96-7971584b945a",
+    "name": "Examen_Final_Services",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51577564",
+    "_collection_link": "https://go.postman.co/collection/51577564-3a59d84f-2a2f-4a5d-be96-7971584b945a?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Creer_bibliotheque",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nom\": \"Ma Bibliothèque\",\r\n    \"courriel\": \"test@biblio.ca\",\r\n    \"mot_de_passe\": \"1234\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/bibliotheques",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "bibliotheques"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get_cle_bibliotheque",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"courriel\": \"test@biblio.ca\",\r\n    \"mot_de_passe\": \"1234\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/bibliotheques/cle",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "bibliotheques",
+            "cle"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get_new_cle_bibliotheque",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"courriel\": \"test@biblio.ca\",\r\n    \"mot_de_passe\": \"1234\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/bibliotheques/cle?nouvelle=1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "bibliotheques",
+            "cle"
+          ],
+          "query": [
+            {
+              "key": "nouvelle",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get_livres",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "API123456",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/livres",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "livres"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get_tout_livres",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "API123456",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/livres?tous=1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "livres"
+          ],
+          "query": [
+            {
+              "key": "tous",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get_livre_details",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "API123456",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/livres/2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "livres",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add_livre",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "API123456",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"titre\": \"Le Comte de Monte-Cristo\",\r\n    \"auteur\": \"Alexandre Dumas\",\r\n    \"isbn\": \"9782070409228\",\r\n    \"description\": \"Un roman d'aventure classique\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/livres",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "livres"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Modifier_livre",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "API123456",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"titre\": \"Le Comte de Monte-Cristo\",\r\n    \"auteur\": \"Alexandre Dumas\",\r\n    \"isbn\": \"9782070409228\",\r\n    \"description\": \"Description modifiée\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/livres/3",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "livres",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Changer_statut_livre",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "API123456",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"disponible\": false\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/livres/3/statut",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "livres",
+            "3",
+            "statut"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete_livre",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "API123456",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/livres/3",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "livres",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Detail_pret",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "API123456",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/prets/2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "prets",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Creer_pret",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "API123456",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"livre_id\": 1,\r\n    \"emprunteur\": \"Jean Dupont\",\r\n    \"date_debut\": \"2026-05-08\",\r\n    \"date_retour\": \"2026-06-08\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/prets",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "prets"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Modifier_pret",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "API123456",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"emprunteur\": \"Jean Dupont\",\r\n    \"date_debut\": \"2026-05-08\",\r\n    \"date_retour\": \"2026-07-08\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/prets/2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "prets",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Changer_date_retour_pret",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "API123456",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"date_retour\": \"2026-05-10\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/prets/2/statut",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "prets",
+            "2",
+            "statut"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete_pret",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "API123456",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/prets/2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "prets",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": ""
+    }
+  ]
+}

@@ -46,6 +46,7 @@ spec:
               props:
                 defaultValue:
                   $$jsExpression: dataGrid.selection?.titre ?? ""
+                label: ""
         - component: PageColumn
           name: pageColumn1
           layout:
@@ -102,6 +103,13 @@ spec:
           $$jsExpressionAction: "actionAddLivre.call()\r
 
             queryGetLivres.refetch()"
+    - component: Text
+      name: text2
+      props:
+        value:
+          $$jsExpression:
+            'actionSupprimerLivre?.error ? "Il reste des prêts associés au
+            livre la supression n''a pas eu lieu" : ""'
     - component: DataGrid
       name: dataGrid
       props:
@@ -172,7 +180,7 @@ spec:
 
           \    ...livre,\r
 
-          \    disponible: livre.disponible === 1 ? \"Oui\" : \"Non\",\r
+          \    disponible: livre.disponible === true ? \"Oui\" : \"Non\",\r
 
           \    description: livre.description ?? \"Aucune\"\r
 

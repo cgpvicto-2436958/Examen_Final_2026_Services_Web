@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://examen-final-2026-services-web.onrender.com';
 
 window.onload = () => {
     document.getElementById('btn-creer').addEventListener('click', creerBibliotheque);
